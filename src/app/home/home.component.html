@@ -1,0 +1,273 @@
+<!-- BEGIN TABLE -->
+<!-- <div style="margin-right: 15px;">
+  <form  class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+    <div class="input-group">
+      <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
+        aria-label="Search" aria-describedby="basic-addon2" id="searchProduct"(keyup)="onSetSearchProduct($event)">
+      <div class="input-group-append">
+        <button class="btn btn-primary" type="button">
+          <i class="fas fa-search fa-sm"></i>
+        </button>
+      </div>
+    </div>
+  </form>
+</div> -->
+
+
+<!-- <div style="margin-right: 15px;">
+  <form
+    class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search"
+  >
+    <div class="input-group">
+      <input
+        type="text"
+        class="form-control bg-light border-0 small"
+        placeholder="Search for..."
+        aria-label="Search"
+        aria-describedby="basic-addon2"
+        id="searchProduct"
+        (keyup)="getSearch($event)"
+      />
+      <div class="input-group-append">
+        <button class="btn btn-primary" type="button">
+          <i class="fas fa-search fa-sm"></i>
+        </button>
+      </div>
+    </div>
+  </form>
+</div> -->
+
+<div class="topnav">
+    <div class="search-container">
+      <form>
+        <input type="text" placeholder="Search.." name="search">
+        <button type="submit"><i class="fa fa-search"></i></button>
+      </form>
+    </div>
+  </div>
+  
+    <table id="datatableid" class="table table-hover">
+      <thead>
+        <tr class="thead-dark">
+          <th>ID</th>
+          <th>Class</th>
+          <th>Name</th>
+          <th>DoB</th>
+          <th>Major</th>
+          <th>Status</th>
+          <th></th>
+          <th></th>
+  
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of Items | async" style="background-color: antiquewhite;color: black;" id="mytrID"> 
+          <td>{{item.id}} </td>
+          <td>{{item.class1}}</td>
+          <td>{{item.name}}</td>
+          <td>{{item.dob}}</td>
+          <td>{{item.major}} </td>
+          <td>
+            <!-- {{item.status}}  -->
+            <a *ngIf="changeStatus(item.status)" class ="btn btn-icon-only" title ="Present">
+              <i class="fa fa-check font-green" style="color: greenyellow;"></i>
+            </a>
+            <a *ngIf="!changeStatus(item.status)" class ="btn btn-icon-only" title ="Absent">
+              <i class="fa fa-times font-red" style="color:red"></i>
+            </a>
+          </td>
+  
+          <td>
+            <!-- <button class="btn btn-primary" (click)= "Delete(item.id1)">
+              Delete
+            </button> -->
+            <button class="btn btn-primary" ><i class="fa fa-eraser" (click)= "Delete(item.id1)"></i></button>
+            
+          </td>
+  
+          <td>
+              <div class="modal fade" id="dialog2" role="dialog" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                    
+                        <div class="modal-header">
+                            <h5 class="modal-title" style="color: black;">Update Student Info</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        
+                        <div class="modal-body">
+                          <form class="user" [formGroup]="addstudent">
+                            <div class="form-group row" >
+                              <div class="col-sm-6 mb-3 mb-sm-0">
+                                <input type="text" name="idupdate" class="form-control form-control-user" id="StudentID" (keyup)="getID($event)" value="{{firebaseID}}" formControlName="id" minlength="6" maxlength="6">
+                                <div *ngIf="addstudent.controls.id.invalid && (addstudent.controls.id.dirty ||addstudent.controls.id.touched)">
+                                  <small *ngIf="addstudent.controls.id.errors.required" class="text-danger"> ID required.</small>
+                                  <small *ngIf="addstudent.controls.id.errors.minlength" class="text-danger"> ID require 6 digits.</small>
+                                  
+                                  
+                                </div>
+                              </div>
+                              <div class="col-sm-6">
+                                <input type="text" class="form-control form-control-user" id="StudentClass"  (keyup)="getClass1($event)" value="{{firebaseClass1}}" formControlName="class1">
+                                <div *ngIf="addstudent.controls.class1.invalid && (addstudent.controls.class1.dirty ||addstudent.controls.class1.touched)">
+                                  <small *ngIf="addstudent.controls.class1.errors.required" class="text-danger"> Class required.</small>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <input type="text" class="form-control form-control-user" id="StudentName"  (keyup)="getName($event)"value="{{firebaseName}}" formControlName="name">
+                              <div *ngIf="addstudent.controls.name.invalid && (addstudent.controls.name.dirty ||addstudent.controls.name.touched)">
+                                <small *ngIf="addstudent.controls.name.errors.required" class="text-danger"> Name required.</small>
+                              </div>
+                            </div>
+                            <div class="form-group row">
+                              <div class="col-sm-4 mb-3 mb-sm-0">
+                                <!-- <input type="text" class="form-control form-control-user" id="StudentDoB"  (keyup)="getDoB($event)"value="{{firebaseDoB}}" > -->
+                                <select class="form-control"  id="StudentDoB" (click)="getDoB($event)" style="border-radius:5em;margin-top: 5px" value="{{firebaseDoB}}">
+                                  <option value="1996">1996</option>  
+                                  <option value="1997">1997</option>  
+                                  <option value="1998">1998</option>  
+                                  <option value="1999">1999</option>  
+                                  <option value="2000">2000</option>  
+                                </select>
+                              </div>
+                              <div class="col-sm-3">
+                                <input type="text" class="form-control form-control-user" id="StudentMajor"  (keyup)="getMajor($event)"value="{{firebaseMajor}}" formControlName="major">
+                                <div *ngIf="addstudent.controls.major.invalid && (addstudent.controls.major.dirty ||addstudent.controls.major.touched)">
+                                  <small *ngIf="addstudent.controls.major.errors.required" class="text-danger"> Major required.</small>
+                                </div>
+                              </div>
+                              <div class="col-sm-5 mb-3 mb-sm-0">
+                                 <select name="status" class="form-control"  id="StudentStatus" (click)="getStatus($event)" value="{{firebaseStatus}}" style="border-radius:5em;margin-top: 5px" formControlName="status">
+                                  <option value='true' >Present</option>    
+                                  <option value='false'>Absent</option>
+                                </select>
+                                <div *ngIf="addstudent.controls.status.invalid && (addstudent.controls.status.dirty ||addstudent.controls.status.touched)">
+                                  <small *ngIf="addstudent.controls.status.errors.required" class="text-danger"> Status required.</small>
+                                </div>
+                                <!-- <input type="text" class="form-control form-control-user" id="StudentStatus" (keyup)="getStatus($event)" value="{{firebaseStatus}}"> -->
+                              </div>
+                            </div>
+                            <button class="btn btn-primary btn-user btn-block" data-dismiss="modal" (click)="update()" [disabled]="addstudent.invalid">
+                              Update
+                            </button>
+                            <hr>
+                          </form>
+                        </div>
+                        
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <script>
+              $('#dialog2').modal('show')
+            </script>
+            <button type="button" class="btn btn-primary" data-toggle="modal"  data-target="#dialog2" (click)="getData(item.id1,item.id,item.class1,item.name,item.dob,item.major,item.status)">
+              Update
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  
+    <script>
+      $(document).ready(function() {
+        $('#datatableid').DataTable();
+    } ); 
+    </script>
+  <!-- END TABLE -->
+  
+  <!-- BEGOM MODAL -->
+    <div class="modal fade" id="dialog0" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+          
+              <div class="modal-header">
+                  <h5 class="modal-title">Insert Student Info</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                  </button>
+              </div>
+              
+              <div class="modal-body">
+                <form class="user" [formGroup] = "addstudent">
+                  <div class="form-group row" >   
+                    <div class="col-sm-6 mb-3 mb-sm-0">
+                      <input type="text" class="form-control form-control-user" id="StudentID" placeholder="216xxxx" (keyup)="getID($event)" formControlName="id" minlength="6" maxlength="6">
+                      <div *ngIf="addstudent.controls.id.invalid && (addstudent.controls.id.dirty ||addstudent.controls.id.touched)">
+                        <small *ngIf="addstudent.controls.id.errors.required" class="text-danger"> ID required.</small>
+                        <small *ngIf="addstudent.controls.id.errors.minlength" class="text-danger"> ID require 6 digits.</small>
+                      </div>
+                    </div>
+                    <div class="col-sm-6">
+                      <input type="text" class="form-control form-control-user" id="StudentClass" placeholder="QLxxxx" (keyup)="getClass1($event)" formControlName="class1">
+                      <div *ngIf="addstudent.controls.class1.invalid && (addstudent.controls.class1.dirty ||addstudent.controls.class1.touched)">
+                        <small *ngIf="addstudent.controls.class1.errors.required" class="text-danger"> Class required.</small>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <input type="text" class="form-control form-control-user" id="StudentName" placeholder="Nguyen Van A" (keyup)="getName($event)" formControlName="name">
+                    <div *ngIf="addstudent.controls.name.invalid && (addstudent.controls.name.dirty ||addstudent.controls.name.touched)">
+                      <small *ngIf="addstudent.controls.name.errors.required" class="text-danger"> Name required.</small>
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <div class="col-sm-5">
+                      <!-- <input type="text" class="form-control form-control-user" id="StudentDoB" placeholder="29/03" (keyup)="getDoB($event)"> -->
+                      <select class="form-control"  id="StudentDoB" (click)="getDoB($event)" style="border-radius:5em;margin-top: 5px" value="1996">
+                        <option value="1996">1996</option>  
+                        <option value="1997">1997</option>  
+                        <option value="1998">1998</option>  
+                        <option value="1999">1999</option>  
+                        <option value="2000">2000</option>  
+                      </select>
+                    </div>
+                    <div class="col-sm-3">
+                      <input type="text" class="form-control form-control-user" id="StudentMajor" placeholder="CNTT" (keyup)="getMajor($event)" formControlName="major">
+                      <div *ngIf="addstudent.controls.major.invalid && (addstudent.controls.major.dirty ||addstudent.controls.major.touched)">
+                        <small *ngIf="addstudent.controls.major.errors.required" class="text-danger"> Major required.</small>
+                      </div>
+                    </div>
+                    <div class="col-sm-4 ">
+                      <select name="status" class="form-control"  id="StudentStatus" (click)="getStatus($event)" style="border-radius:5em;margin-top: 5px" formControlName="status">
+                        <option value="true">Present</option>  
+                        <option value="false">Absent</option>
+                      </select>
+                      <div *ngIf="addstudent.controls.status.invalid && (addstudent.controls.status.dirty ||addstudent.controls.status.touched)">
+                        <small *ngIf="addstudent.controls.status.errors.required" class="text-danger"> Status required.</small>
+                      </div>
+  
+                      <!-- <input type="text" class="form-control form-control-user" id="StudentStatus" (keyup)="getStatus($event)">
+                       -->
+                      <!-- <input type="text" class="form-control form-control-user" id="StudentStatus" placeholder="Status" (keyup)="getStatus($event)"> -->
+                    </div>
+                  </div>
+                  <button class="btn btn-primary btn-user btn-block" (click)="AddNew()" [disabled]="addstudent.invalid">
+                    Add
+                  </button>
+                  <hr>
+                </form>
+              </div>
+              
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+              </div>
+              
+          </div>
+      </div>
+  </div>
+  <!-- END MODAL -->
+  
+  <script>
+    $('#dialog0').modal('show')
+  </script>
+  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#dialog0">
+    Add
+  </button>
